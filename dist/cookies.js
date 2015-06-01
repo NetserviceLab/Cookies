@@ -102,10 +102,15 @@
             var cookiesArray = documentCookie ? documentCookie.split('; ') : [];
 
             for (var i = 0; i < cookiesArray.length; i++) {
-                var cookieKvp = Cookies._getKeyValuePairFromCookieString(cookiesArray[i]);
-
-                if (cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] === undefined) {
-                    cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] = cookieKvp.value;
+                //fix charset error when Cookie is not UTF-8 but for example ISO
+                try {
+                    var cookieKvp = Cookies._getKeyValuePairFromCookieString(cookiesArray[i]);
+    
+                    if (cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] === undefined) {
+                        cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] = cookieKvp.value;
+                    }
+                } catch (e) {
+                  // ignore parse exceptions
                 }
             }
 
